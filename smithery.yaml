@@ -1,0 +1,49 @@
+# Smithery configuration file: https://smithery.ai/docs/build/project-config
+
+build:
+  dockerBuildPath: opensearch-vector-mcp-server
+startCommand:
+  type: stdio
+  commandFunction:
+    # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
+    |-
+    (config) => ({ command: 'opensearch-vector-mcp-server', args: [], env: { OPENSEARCH_VECTOR_ENDPOINT: config.opensearchVectorEndpoint, OPENSEARCH_VECTOR_USERNAME: config.opensearchVectorUsername, OPENSEARCH_VECTOR_PASSWORD: config.opensearchVectorPassword, OPENSEARCH_VECTOR_INSTANCE_ID: config.opensearchVectorInstanceId, OPENSEARCH_VECTOR_INDEX_NAME: config.opensearchVectorIndexName, AISEARCH_API_KEY: config.aiSearchApiKey || '', AISEARCH_ENDPOINT: config.aiSearchEndpoint || '' } })
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP.
+    type: object
+    required:
+      - opensearchVectorEndpoint
+      - opensearchVectorUsername
+      - opensearchVectorPassword
+      - opensearchVectorInstanceId
+    properties:
+      opensearchVectorEndpoint:
+        type: string
+        description: OpenSearch Vector endpoint URL, e.g., http://host:port
+      opensearchVectorUsername:
+        type: string
+        description: Username for OpenSearch Vector
+      opensearchVectorPassword:
+        type: string
+        description: Password for OpenSearch Vector
+      opensearchVectorInstanceId:
+        type: string
+        description: Instance ID for OpenSearch Vector
+      opensearchVectorIndexName:
+        type: string
+        default: embedding
+        description: Index name in OpenSearch Vector
+      aiSearchApiKey:
+        type: string
+        description: Optional AI Search API key for embeddings
+      aiSearchEndpoint:
+        type: string
+        description: Optional AI Search endpoint for embeddings
+  exampleConfig:
+    opensearchVectorEndpoint: http://localhost:8000
+    opensearchVectorUsername: admin
+    opensearchVectorPassword: password123
+    opensearchVectorInstanceId: instance-abc123
+    opensearchVectorIndexName: embedding
+    aiSearchApiKey: key-xyz
+    aiSearchEndpoint: http://aisearch.example.com
